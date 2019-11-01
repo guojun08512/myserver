@@ -20,6 +20,6 @@ func Start() {
 	web.SetupRoutes(e)
 	dbName := config.GetConfig().DB.DBName
 	db.NewDB(dbName)
-	log.Fatal(e.Start(fmt.Sprintf(":%d", config.GetConfig().Port)))
+	e.Start(fmt.Sprintf(":%d", config.GetConfig().Port))
 	defer db.CloseORM()
 }
