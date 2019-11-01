@@ -44,14 +44,14 @@ func AuthMiddleware() echo.MiddlewareFunc {
 				// All ok, continue
 				username, okUsername := claims["username"]
 				fmt.Println(username, okUsername)
-				// roles, okPerms := claims["roles"]
-				// if okUsername && okPerms && roles != nil {
-				// 	// Look through the perms until we find that the user has this permission
-				// 	err := roleAuth.checkRole(roles, c.Request().Method, c.Path())
-				// 	if err != nil {
-				// 		return c.String(http.StatusForbidden, fmt.Sprintf("Permission denied for user %s. %s", username, err.Error()))
-				// 	}
-				// }
+				//roles, okPerms := claims["roles"]
+				//if okUsername && okPerms && roles != nil {
+				//	// Look through the perms until we find that the user has this permission
+				//	err := rl.CheckRole(roles, c.Request().Method, c.Path())
+				//	if err != nil {
+				//		return c.String(http.StatusForbidden, fmt.Sprintf("Permission denied for user %s. %v", username, err))
+				//	}
+				//}
 				return next(c)
 			}
 			return c.String(http.StatusUnauthorized, errNotAuthorized.Error())

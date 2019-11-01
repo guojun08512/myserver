@@ -42,6 +42,7 @@ type Config struct {
 	DB      *db
 	Version string
 	Port    int
+	JWTkey  string
 }
 
 var log = logger.WithNamespace("config")
@@ -76,6 +77,7 @@ func UseViper(v *viper.Viper) error {
 			DBIdleconnsMax: v.GetInt("db.dbIdleconns_max"),
 			DBOpenconnsMax: v.GetInt("db.dbOpenconns_max"),
 		},
+		JWTkey: v.GetString("jwtkey"),
 	}
 	return nil
 }

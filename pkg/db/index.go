@@ -55,6 +55,7 @@ func NewDB(dbname string) {
 	//最大打开连接数
 	orm.DB().SetMaxIdleConns(openconnsMax)
 	Gorm[dbname] = orm
+	orm.AutoMigrate(&User{})
 }
 
 // GetORMByName 通过名称获取Gorm实例

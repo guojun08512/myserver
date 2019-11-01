@@ -1,6 +1,7 @@
 package web
 
 import (
+	"fmt"
 	"net/http"
 
 	"myserver/web/middlewares"
@@ -14,6 +15,7 @@ func version(c echo.Context) error {
 }
 
 func test(c echo.Context) error {
+	fmt.Println("test")
 	return c.NoContent(http.StatusOK)
 }
 
@@ -25,12 +27,13 @@ func SetupRoutes(router *echo.Echo) {
 	router.GET("/", version)
 	{
 		mwsNotBlocked := []echo.MiddlewareFunc{
+			middlewares.AuthMiddleware(),
 			middlewares.Accept(middlewares.AcceptOptions{
 				DefaultContentTypeOffer: "application/json",
 			}),
 		}
-		router.Group("/v1", mwsNotBlocked...)
-		router.GET("/test", test)
+		router.Group("/v1")
+		router.GET("/test", test,  mwsNotBlocked...)
 	}
 }
 

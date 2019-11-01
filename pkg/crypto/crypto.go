@@ -4,7 +4,9 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"io"
+	"myserver/pkg/config"
 	"time"
+	"github.com/dgrijalva/jwt-go"
 )
 
 // GenerateRandomBytes returns securely generated random bytes. It will return
@@ -38,4 +40,29 @@ func Base64Decode(value []byte) ([]byte, error) {
 		return nil, err
 	}
 	return dec[:b], nil
+}
+
+type jwtCustomClaims struct {
+	UserID 	  string   `json:"userID"`
+	Roles    []string `json:"roles"`
+	jwt.StandardClaims
+}
+const jwtExpiry = 12 * 60 * 60
+
+func CreateToken(userID string, roles []string) (string, error) {
+	claims := jwtCustomClaims{
+		UserID: userID,
+		Roles:    roles,
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: time.Now().Unix() + jwtExpiry,
+			IssuedAt:  time.Now().Unix(),
+			Subject:   "Session Token",
+		},
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	tokenstring, err := token.SignedString(config.GetConfig().JWTkey)
+	if err != nil {
+		return "", err
+	}
+	return tokenstring, nil
 }
