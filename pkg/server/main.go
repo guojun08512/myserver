@@ -1,7 +1,6 @@
 package server
 
 import (
-	"errors"
 	"fmt"
 
 	"myserver/pkg/config"
@@ -14,14 +13,13 @@ import (
 
 var log = logger.WithNamespace("server")
 
+// Start 启动服务
 func Start() {
 	e := echo.New()
 	// Routes
 	web.SetupRoutes(e)
-	dbClient := db.GetDbClient()
-	if dbClient == nil {
-		panic(errors.New("db client init failed"))
-	}
+	dbName := config.GetConfig().DB.DBName
+	db.NewDB(dbName)
 	log.Fatal(e.Start(fmt.Sprintf(":%d", config.GetConfig().Port)))
-	defer dbClient.Close()
+	defer db.CloseORM()
 }

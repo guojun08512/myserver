@@ -5,4 +5,6 @@ db:
   username: root
   password: ""
   host: 127.0.0.1:3306
-  dbname: test
+  dbname: pay_server
+  dbIdleconns_max: 0
+  dbOpenconns_max: 20

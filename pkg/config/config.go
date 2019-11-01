@@ -29,10 +29,12 @@ const Filename = "my-config"
 var config *Config
 
 type db struct {
-	UserName string
-	PassWord string
-	DBName   string
-	Host     string
+	UserName       string
+	PassWord       string
+	DBName         string
+	Host           string
+	DBIdleconnsMax int
+	DBOpenconnsMax int
 }
 
 //Config 配置信息
@@ -67,10 +69,12 @@ func UseViper(v *viper.Viper) error {
 		Port:    v.GetInt("port"),
 		Version: v.GetString("version"),
 		DB: &db{
-			UserName: v.GetString("db.username"),
-			PassWord: v.GetString("db.password"),
-			DBName:   v.GetString("db.dbname"),
-			Host:     v.GetString("db.host"),
+			UserName:       v.GetString("db.username"),
+			PassWord:       v.GetString("db.password"),
+			DBName:         v.GetString("db.dbname"),
+			Host:           v.GetString("db.host"),
+			DBIdleconnsMax: v.GetInt("db.dbIdleconns_max"),
+			DBOpenconnsMax: v.GetInt("db.dbOpenconns_max"),
 		},
 	}
 	return nil
