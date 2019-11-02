@@ -2,12 +2,12 @@ package web
 
 import (
 	"fmt"
+	"myserver/web/auth"
 	"net/http"
-
-	"myserver/web/middlewares"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"myserver/web/middlewares"
 )
 
 func version(c echo.Context) error {
@@ -32,7 +32,9 @@ func SetupRoutes(router *echo.Echo) {
 				DefaultContentTypeOffer: "application/json",
 			}),
 		}
-		router.Group("/v1")
+		//auth
+		auth.AuthRouter(router.Group("/v1"))
+
 		router.GET("/test", test,  mwsNotBlocked...)
 	}
 }

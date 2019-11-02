@@ -1,8 +1,9 @@
-package login
+package auth
 
 import (
 	"errors"
-	"github.com/labstack/echo"
+	"encoding/json"
+	"github.com/labstack/echo/v4"
 	"myserver/pkg/crypto"
 	"myserver/pkg/db"
 	"myserver/pkg/logger"
@@ -15,15 +16,8 @@ var (
 	userNotFount = errors.New("User Not Found, Check Your Name, Password")
 )
 
-type loginInfo struct {
-	Name string `json:"name"`
-	PassWord string `json:"password"`
-}
-
-
-
 func login(c echo.Context) error {
-	l := &loginInfo{}
+	l := &userInfo{}
 	if err := c.Bind(l); err != nil {
 		log.Errorf("login failed %v", err.Error())
 		return c.String(http.StatusBadRequest, err.Error())
@@ -34,8 +28,17 @@ func login(c echo.Context) error {
 		log.Errorf("login failed when GetUser: %v", err)
 		return c.String(http.StatusBadRequest, userNotFount.Error())
 	}
-	token := crypto.CreateToken(u.ID, u.Roles)
-	c.String(http.StatusOK, token)
+	var roles []string
+	err = json.Unmarshal([]byte(u.Roles), &roles)
+	if err != nil {
+		log.Errorf("login failed when json parsed: %v", err)
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+	token ,err := crypto.CreateToken(u.ID, roles)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+	return c.String(http.StatusOK, token)
 }
 
 func Router(router *echo.Group) {

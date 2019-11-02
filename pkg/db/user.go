@@ -7,31 +7,29 @@ import (
 )
 
 type User struct {
-	gorm.Model
-	ID   		int64		`gorm:"primary_key;size:32"`
-	Name     	string 		`json:"name"`
-	Password 	string    	`json:"password"`
-	Roles    	string 		`json:"roles"`
-	Disable  	bool  		`json:"-"`
+	//gorm.Model
+	ID  		string		`gorm:"primary_key;type:varchar(36);not null;"`
+	Name     	string 		`gorm:"type:varchar(32)"`
+	Password 	string    	`gorm:"type:varchar(32)"`
+	Roles    	string
+	Disable  	bool
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 	DeletedAt   *time.Time 	`gorm:"index" json:"-"`
-	Email       string     	`gorm:"size=32"`
+	Email       string     	`gorm:"type:varchar(32)"`
+	Phone       string      `gorm:"type:varchar(20)"`
 }
 
-func (user *User) BeforeCreate(scope *gorm.Scope) error {
-	scope.SetColumn("ID", uuid.NewV4())
-	return nil
-}
-
-func CreateUser(db *gorm.DB, name, password, email, role string) *User {
+func CreateUser(db *gorm.DB, name, password, email, role, phone string) *User {
 	u := User{
+		ID: uuid.NewV4().String(),
 		Name: name,
 		Password: password,
 		Email: email,
 		Roles: role,
+		Phone: phone,
 	}
-	db.Save(&u)
+	db.Create(&u)
 	return &u
 }
 
