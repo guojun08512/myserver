@@ -35,7 +35,7 @@ func login(c echo.Context) error {
 		return c.String(http.StatusBadRequest, userNotFount.Error())
 	}
 	token := crypto.CreateToken(u.ID, u.Roles)
-	c.String(http.StatusOK, token.)
+	c.String(http.StatusOK, token)
 }
 
 func Router(router *echo.Group) {

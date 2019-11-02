@@ -42,12 +42,12 @@ func NewDB(dbname string) {
 	//GDB.LogMode(true)
 	retryCount := 5
 	for orm, err = gorm.Open(driverMysql, connectString); err != nil; {
+		if retryCount <= 0 {
+			panic(errors.New(" 数据库连接失败!! "))
+		}
 		fmt.Println("数据库连接异常! 5秒重试")
 		time.Sleep(5 * time.Second)
 		orm, err = gorm.Open(driverMysql, connectString)
-		if retryCount < 0 {
-			panic(errors.New(" 数据库连接失败!! "))
-		}
 		retryCount--
 	}
 	//连接池的空闲数大小

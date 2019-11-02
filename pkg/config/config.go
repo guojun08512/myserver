@@ -18,7 +18,6 @@ import (
 // configuration file
 var Paths = []string{
 	".",
-	"$HOME/Documents/keyayun.com/myserver",
 	"$HOME/.myserver",
 }
 

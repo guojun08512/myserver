@@ -11,7 +11,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-var log = logger.WithNamespace("server")
+var log = logger.WithNamespace("pkg/server")
 
 // Start 启动服务
 func Start() {
