@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	defaultContentTypeOffer = "application/json"
+	defaultContentTypeOffer = "application/vnd.api+json"
 	acceptContentTypeKey    = "offer-content-type"
 )
 

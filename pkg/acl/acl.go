@@ -32,7 +32,6 @@ type Acl struct {
 	RoleCategories []*UserRoleCategory
 }
 
-
 func (a *Acl) CheckRole(userRoles interface{}, method, path string) error {
 	perm := a.getRequestRole(method, path)
 	if perm == "" {

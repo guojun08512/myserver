@@ -3,10 +3,10 @@ package crypto
 import (
 	"crypto/rand"
 	"encoding/base64"
+	"github.com/dgrijalva/jwt-go"
 	"io"
 	"myserver/pkg/config"
 	"time"
-	"github.com/dgrijalva/jwt-go"
 )
 
 // GenerateRandomBytes returns securely generated random bytes. It will return
@@ -60,7 +60,8 @@ func CreateToken(userID string, roles []string) (string, error) {
 		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenstring, err := token.SignedString(config.GetConfig().JWTkey)
+	b := []byte(config.GetConfig().JWTkey)
+	tokenstring, err := token.SignedString(b)
 	if err != nil {
 		return "", err
 	}
