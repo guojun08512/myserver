@@ -3,6 +3,7 @@ package middlewares
 import (
 	"errors"
 	"fmt"
+	"myserver/pkg/config"
 	"net/http"
 	"strings"
 
@@ -42,8 +43,10 @@ func AuthMiddleware() echo.MiddlewareFunc {
 			// Validate token
 			if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 				// All ok, continue
-				username, okUsername := claims["username"]
-				fmt.Println(username, okUsername)
+				userID, okUserID := claims["userID"]
+				if okUserID {
+					c.Request().Header.Add("userID", userID.(string))
+				}
 				//roles, okPerms := claims["roles"]
 				//if okUsername && okPerms && roles != nil {
 				//	// Look through the perms until we find that the user has this permission
@@ -73,7 +76,7 @@ func getToken(c echo.Context) (*jwt.Token, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
-		return token, nil
+		return []byte(config.GetConfig().JWTkey), nil
 	})
 	if err != nil {
 		return nil, err

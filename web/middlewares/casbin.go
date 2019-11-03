@@ -66,8 +66,8 @@ func MiddlewareWithConfig(config Config) echo.MiddlewareFunc {
 // GetUserName gets the user name from the request.
 // Currently, only HTTP basic authentication is supported
 func (a *Config) GetUserName(c echo.Context) string {
-	username, _, _ := c.Request().BasicAuth()
-	return username
+	userID := c.Request().Header.Get("userID")
+	return userID
 }
 
 // CheckPermission checks the user/method/path combination from the request.
