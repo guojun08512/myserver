@@ -28,6 +28,7 @@ func SetupRoutes(router *echo.Echo) {
 	{
 		mwsNotBlocked := []echo.MiddlewareFunc{
 			middlewares.AuthMiddleware(),
+			middlewares.CasbinMiddleware(),
 			middlewares.Accept(middlewares.AcceptOptions{
 				DefaultContentTypeOffer: "application/json",
 			}),

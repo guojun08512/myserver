@@ -39,7 +39,9 @@ func login(c echo.Context) error {
 	if err != nil {
 		return jsonapi.ResponseWithJson(c, http.StatusInternalServerError, err)
 	}
-	return jsonapi.ResponseWithJson(c, http.StatusOK,  map[string]interface{}{"token": token })
+	return jsonapi.ResponseWithJson(c, http.StatusOK,  map[string]interface{}{
+		"token": token,
+	})
 }
 
 func Router(router *echo.Group) {
